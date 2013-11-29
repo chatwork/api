@@ -1,0 +1,1446 @@
+#%RAML 0.8
+#http://raml.org/index.html
+---
+title: ChatWork API
+baseUri: 'https://api.chatwork.com/{version}'
+version: v1
+traits:
+  - 
+    room_members:
+      queryParameters:
+        members_admin_ids:
+          displayName: 管理者権限のユーザー
+          type: string
+          required: true
+          description: '[string-list:type=integer]作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。'
+          example: 123,542,1001
+        members_member_ids:
+          displayName: メンバー権限のユーザー
+          type: string
+          description: '[string-list:type=integer]作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。'
+          example: 21,344
+        members_readonly_ids:
+          displayName: 閲覧のみ権限のユーザー
+          type: string
+          description: '[string-list:type=integer]作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。'
+          example: 15,103
+  - 
+    room_icon:
+      queryParameters:
+        icon_preset:
+          displayName: アイコン種類
+          type: string
+          description: >
+            グループチャットのアイコン種類
+          enum:
+            - group
+            - check
+            - document
+            - meeting
+            - event
+            - project
+            - business
+            - study
+            - security
+            - star
+            - idea
+            - heart
+            - magcup
+            - beer
+            - music
+            - sports
+            - travel
+          example: meeting
+  - 
+    nocontent_response:
+      responses:
+        204:
+          body:
+            application/json:
+              example:
+  - 
+    unauthorized_response:
+      responses:
+        401:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type":"string"
+                        }
+                      ]
+                    }
+                  }
+                }
+              example: |
+                {
+                  "errors": ["Invalid API token"]
+                }
+  - 
+    room_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "room_id":           {
+                      "type": "integer"
+                    },
+                    "name":              {
+                      "type": "string"
+                    },
+                    "type":              {
+                      "type": "string",
+                      "enum": ["my", "direct", "group"]
+                    },
+                    "role":            {
+                      "type": "string",
+                      "enum": ["admin", "member", "readonly"]
+                    },
+                    "sticky":            {
+                      "type": "boolean"
+                    },
+                    "unread_num":        {
+                      "type": "integer"
+                    },
+                    "mention_num":       {
+                      "type": "integer"
+                    },
+                    "mytask_num":        {
+                      "type": "integer"
+                    },
+                    "message_num":       {
+                      "type": "integer"
+                    },
+                    "file_num":          {
+                      "type": "integer"
+                    },
+                    "task_num":          {
+                      "type": "integer"
+                    },
+                    "icon_path":         {
+                      "type": "string"
+                    },
+                    "last_update_time":  {
+                      "type": "integer"
+                    },
+                    "description":  {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "room_id",
+                    "name",
+                    "type",
+                    "role",
+                    "sticky",
+                    "unread_num",
+                    "mention_num",
+                    "mytask_num",
+                    "message_num",
+                    "file_num",
+                    "task_num",
+                    "icon_path",
+                    "last_update_time",
+                    "description"
+                  ]
+                }
+              example: |
+                {
+                  "room_id": 123,
+                  "name": "Group Chat Name",
+                  "type": "group",
+                  "role": "admin",
+                  "sticky": false,
+                  "unread_num": 10,
+                  "mention_num": 1,
+                  "mytask_num": 0,
+                  "message_num": 122,
+                  "file_num": 10,
+                  "task_num": 17,
+                  "icon_path": "https://example.com/ico_group.png",
+                  "last_update_time": 1298905200,
+                  "description": "room description text"
+                }
+  - 
+    room_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "room_id":           {
+                          "type": "integer"
+                        },
+                        "name":              {
+                          "type": "string"
+                        },
+                        "type":              {
+                          "type": "string",
+                          "enum": ["my", "direct", "group"]
+                        },
+                        "role":            {
+                          "type": "string",
+                          "enum": ["admin", "member", "readonly"]
+                        },
+                        "sticky":            {
+                          "type": "boolean"
+                        },
+                        "unread_num":        {
+                          "type": "integer"
+                        },
+                        "mention_num":       {
+                          "type": "integer"
+                        },
+                        "mytask_num":        {
+                          "type": "integer"
+                        },
+                        "message_num":       {
+                          "type": "integer"
+                        },
+                        "file_num":          {
+                          "type": "integer"
+                        },
+                        "task_num":          {
+                          "type": "integer"
+                        },
+                        "icon_path":         {
+                          "type": "string"
+                        },
+                        "last_update_time":  {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "room_id",
+                        "name",
+                        "type",
+                        "role",
+                        "sticky",
+                        "unread_num",
+                        "mention_num",
+                        "mytask_num",
+                        "message_num",
+                        "file_num",
+                        "task_num",
+                        "icon_path",
+                        "last_update_time"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "room_id": 123,
+                    "name": "Group Chat Name",
+                    "type": "group",
+                    "role": "admin",
+                    "sticky": false,
+                    "unread_num": 10,
+                    "mention_num": 1,
+                    "mytask_num": 0,
+                    "message_num": 122,
+                    "file_num": 10,
+                    "task_num": 17,
+                    "icon_path": "https://example.com/ico_group.png",
+                    "last_update_time": 1298905200
+                  }
+                ]
+  - 
+    task_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "task_id":                 {
+                      "type":"integer"
+                    },
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "account_id": {
+                          "type":"integer"
+                        },
+                        "name": {
+                          "type":"string"
+                        },
+                        "avatar_image_url": {
+                          "type":"string"
+                        }
+                      },
+                      "required": [
+                        "account_id",
+                        "name",
+                        "avatar_image_url"
+                      ]
+                    },
+                    "assigned_by_account":  {
+                      "type": "object",
+                      "properties": {
+                        "account_id": {
+                          "type":"integer"
+                        },
+                        "name": {
+                          "type":"string"
+                        },
+                        "avatar_image_url": {
+                          "type":"string"
+                        }
+                      },
+                      "required": [
+                        "account_id",
+                        "name",
+                        "avatar_image_url"
+                      ]
+                    },
+                    "message_id":              {
+                      "type":"integer"
+                    },
+                    "body":                    {
+                      "type":"string"
+                    },
+                    "limit_time":              {
+                      "type":"integer"
+                    },
+                    "status":                  {
+                      "type":"string",
+                      "enum": ["open", "done"]
+                    }
+                  },
+                  "required": [
+                    "task_id",
+                    "account",
+                    "assigned_by_account",
+                    "message_id",
+                    "body",
+                    "limit_time",
+                    "status"
+                  ]
+                }
+              example: |
+                {
+                  "task_id": 3,
+                  "account": {
+                    "account_id": 123,
+                    "name": "Bob",
+                    "avatar_image_url": "https://example.com/abc.png"
+                  },
+                  "assigned_by_account": {
+                    "account_id": 456,
+                    "name": "Anna",
+                    "avatar_image_url": "https://example.com/def.png"
+                  },
+                  "message_id": 13,
+                  "body": "buy milk",
+                  "limit_time": 1384354799,
+                  "status": "open"
+                }
+  - 
+    my_task_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "task_id": {
+                          "type":"integer"
+                        },
+                        "room": {
+                          "type": "object",
+                          "properties": {
+                            "room_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "icon_path": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "room_id",
+                            "name",
+                            "icon_path"
+                          ]
+                        },
+                        "assigned_by_account": {
+                          "type": "object",
+                          "properties": {
+                            "account_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "avatar_image_url": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "account_id",
+                            "name",
+                            "avatar_image_url"
+                          ]
+                        },
+                        "message_id":              {
+                          "type":"integer"
+                        },
+                        "body":                    {
+                          "type":"string"
+                        },
+                        "limit_time":              {
+                          "type":"integer"
+                        },
+                        "status":                  {
+                          "type":"string",
+                          "enum": ["open", "done"]
+                        }
+                      },
+                      "required": [
+                        "task_id",
+                        "room",
+                        "assigned_by_account",
+                        "message_id",
+                        "body",
+                        "limit_time",
+                        "status"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "task_id": 3,
+                    "room": {
+                      "room_id": 5,
+                      "name": "Group Chat Name",
+                      "icon_path": "https://example.com/ico_group.png"
+                    },
+                    "assigned_by_account": {
+                      "account_id": 456,
+                      "name": "Anna",
+                      "avatar_image_url": "https://example.com/def.png"
+                    },
+                    "message_id": 13,
+                    "body": "buy milk",
+                    "limit_time": 1384354799,
+                    "status": "open"
+                  }
+                ]
+  - 
+    room_task_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "task_id":                 {
+                          "type":"integer"
+                        },
+                        "account": {
+                          "type": "object",
+                          "properties": {
+                            "account_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "avatar_image_url": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "account_id",
+                            "name",
+                            "avatar_image_url"
+                          ]
+                        },
+                        "assigned_by_account":  {
+                          "type": "object",
+                          "properties": {
+                            "account_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "avatar_image_url": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "account_id",
+                            "name",
+                            "avatar_image_url"
+                          ]
+                        },
+                        "message_id":              {
+                          "type":"integer"
+                        },
+                        "body":                    {
+                          "type":"string"
+                        },
+                        "limit_time":              {
+                          "type":"integer"
+                        },
+                        "status":                  {
+                          "type":"string",
+                          "enum": ["open", "done"]
+                        }
+                      },
+                      "required": [
+                        "task_id",
+                        "account",
+                        "assigned_by_account",
+                        "message_id",
+                        "body",
+                        "limit_time",
+                        "status"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "task_id": 3,
+                    "room": {
+                      "room_id": 5,
+                      "name": "Group Chat Name",
+                      "icon_path": "https://example.com/ico_group.png"
+                    },
+                    "account": {
+                      "account_id": 123,
+                      "name": "Bob",
+                      "avatar_image_url": "https://example.com/abc.png"
+                    },
+                    "assigned_by_account": {
+                      "account_id": 456,
+                      "name": "Anna",
+                      "avatar_image_url": "https://example.com/def.png"
+                    },
+                    "message_id": 13,
+                    "body": "buy milk",
+                    "limit_time": 1384354799,
+                    "status": "open"
+                  }
+                ]
+  - 
+    my_account_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "account_id": {
+                      "type": "integer"
+                    },
+                    "room_id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "chatwork_id": {
+                      "type": "string"
+                    },
+                    "organization_id": {
+                      "type": "integer"
+                    },
+                    "organization_name": {
+                      "type": "string"
+                    },
+                    "department": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "introduction": {
+                      "type": "string"
+                    },
+                    "mail": {
+                      "type": "string"
+                    },
+                    "tel_organization": {
+                      "type": "string"
+                    },
+                    "tel_extension": {
+                      "type": "string"
+                    },
+                    "tel_mobile": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "facebook": {
+                      "type": "string"
+                    },
+                    "twitter": {
+                      "type": "string"
+                    },
+                    "avatar_image_url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "account_id",
+                    "room_id",
+                    "name",
+                    "chatwork_id",
+                    "organization_id",
+                    "organization_name",
+                    "department",
+                    "title",
+                    "url",
+                    "introduction",
+                    "mail",
+                    "tel_organization",
+                    "tel_extension",
+                    "tel_mobile",
+                    "skype",
+                    "facebook",
+                    "twitter",
+                    "avatar_image_url"
+                  ]
+                }
+              example: |
+                {
+                  "account_id": 123,
+                  "room_id": 322,
+                  "name": "John Smith",
+                  "chatwork_id": "tarochatworkid",
+                  "organization_id": 101,
+                  "organization_name": "Hello Company",
+                  "department": "Marketing",
+                  "title": "CMO",
+                  "url": "http://mycompany.com",
+                  "introduction": "Self Introduction",
+                  "mail": "taro@example.com",
+                  "tel_organization": "XXX-XXXX-XXXX",
+                  "tel_extension": "YYY-YYYY-YYYY",
+                  "tel_mobile": "ZZZ-ZZZZ-ZZZZ",
+                  "skype": "myskype_id",
+                  "facebook": "myfacebook_id",
+                  "twitter": "mytwitter_id",
+                  "avatar_image_url": "https://example.com/abc.png"
+                }
+  - 
+    account_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "properties": {
+                        "account_id": {
+                          "type": "integer"
+                        },
+                        "room_id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "chatwork_id": {
+                          "type": "string"
+                        },
+                        "organization_id": {
+                          "type": "integer"
+                        },
+                        "organization_name": {
+                          "type": "string"
+                        },
+                        "department": {
+                          "type": "string"
+                        },
+                        "avatar_image_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ],
+                  "required": [
+                    "account_id",
+                    "room_id",
+                    "name",
+                    "chatwork_id",
+                    "organization_id",
+                    "organization_name",
+                    "department",
+                    "avatar_image_url"
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "account_id": 123,
+                    "room_id": 322,
+                    "name": "John Smith",
+                    "chatwork_id": "tarochatworkid",
+                    "organization_id": 101,
+                    "organization_name": "Hello Company",
+                    "department": "Marketing",
+                    "avatar_image_url": "https://example.com/abc.png"
+                  }
+                ]
+  - 
+    room_member_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "properties": {
+                        "account_id": {
+                          "type": "integer"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": ["admin", "member", "readonly"]
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "chatwork_id": {
+                          "type": "string"
+                        },
+                        "organization_id": {
+                          "type": "integer"
+                        },
+                        "organization_name": {
+                          "type": "string"
+                        },
+                        "department": {
+                          "type": "string"
+                        },
+                        "avatar_image_url": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "account_id",
+                        "role",
+                        "name",
+                        "chatwork_id",
+                        "organization_id",
+                        "organization_name",
+                        "department",
+                        "avatar_image_url"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "account_id": 123,
+                    "role": "member",
+                    "name": "John Smith",
+                    "chatwork_id": "tarochatworkid",
+                    "organization_id": 101,
+                    "organization_name": "Hello Company",
+                    "department": "Marketing",
+                    "avatar_image_url": "https://example.com/abc.png"
+                  }
+                ]
+  - 
+    file_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "file_id": {
+                      "type": "integer"
+                    },
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "account_id": {
+                          "type":"integer"
+                        },
+                        "name": {
+                          "type":"string"
+                        },
+                        "avatar_image_url": {
+                          "type":"string"
+                        }
+                      },
+                      "required": [
+                        "account_id",
+                        "name",
+                        "avatar_image_url"
+                      ]
+                    },
+                    "message_id": {
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "filesize": {
+                      "type": "integer"
+                    },
+                    "upload_time": {
+                      "type": "integer"
+                    },
+                    "download_url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "file_id",
+                    "account",
+                    "message_id",
+                    "filename",
+                    "filesize",
+                    "upload_time"
+                  ]
+                }
+              example: |
+                {
+                  "file_id":3,
+                  "account": {
+                    "account_id":123,
+                    "name":"Bob",
+                    "avatar_image_url": "https://example.com/ico_avatar.png"
+                  },
+                  "message_id": 22,
+                  "filename": "README.md",
+                  "filesize": 2232,
+                  "upload_time": 1384414750
+                }
+  - 
+    file_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "file_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "object",
+                          "properties": {
+                            "account_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "avatar_image_url": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "account_id",
+                            "name",
+                            "avatar_image_url"
+                          ]
+                        },
+                        "message_id": {
+                          "type": "integer"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "filesize": {
+                          "type": "integer"
+                        },
+                        "upload_time": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "file_id",
+                        "account",
+                        "message_id",
+                        "filename",
+                        "filesize",
+                        "upload_time"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "file_id": 3,
+                    "account": {
+                      "account_id": 123,
+                      "name": "Bob",
+                      "avatar_image_url": "https://example.com/ico_avatar.png"
+                    },
+                    "message_id": 22,
+                    "filename": "README.md",
+                    "filesize": 2232,
+                    "upload_time": 1384414750
+                  }
+                ]
+  - 
+    message_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "message_id": {
+                      "type": "integer"
+                    },
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "account_id": {
+                          "type":"integer"
+                        },
+                        "name": {
+                          "type":"string"
+                        },
+                        "avatar_image_url": {
+                          "type":"string"
+                        }
+                      },
+                      "required": [
+                        "account_id",
+                        "name",
+                        "avatar_image_url"
+                      ]
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "send_time": {
+                      "type": "integer"
+                    },
+                    "update_time": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "message_id",
+                    "account",
+                    "body",
+                    "send_time",
+                    "update_time"
+                  ]
+                }
+              example: |
+                {
+                  "message_id": 5,
+                  "account": {
+                    "account_id": 123,
+                    "name": "Bob",
+                    "avatar_image_url": "https://example.com/ico_avatar.png"
+                  },
+                  "body": "Hello Chatwork!",
+                  "send_time": 1384242850,
+                  "update_time": 0
+                }
+  - 
+    message_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "object",
+                          "properties": {
+                            "account_id": {
+                              "type":"integer"
+                            },
+                            "name": {
+                              "type":"string"
+                            },
+                            "avatar_image_url": {
+                              "type":"string"
+                            }
+                          },
+                          "required": [
+                            "account_id",
+                            "name",
+                            "avatar_image_url"
+                          ]
+                        },
+                        "body": {
+                          "type": "string"
+                        },
+                        "send_time": {
+                          "type": "integer"
+                        },
+                        "update_time": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "message_id",
+                        "account",
+                        "body",
+                        "send_time",
+                        "update_time"
+                      ]
+                    }
+                  ]
+                }
+              example: |
+                [
+                  {
+                    "message_id": 5,
+                    "account": {
+                      "account_id": 123,
+                      "name": "Bob",
+                      "avatar_image_url": "https://example.com/ico_avatar.png"
+                    },
+                    "body": "Hello Chatwork!",
+                    "send_time": 1384242850,
+                    "update_time": 0
+                  }
+                ]
+/me:
+  GET:
+    description: 自分自身の情報を取得
+    is:
+      - my_account_response
+      - unauthorized_response
+/my:
+  /status:
+    GET:
+      description: >
+        自分の未読数、未読To数、未完了タスク数を返す
+      is:
+        - unauthorized_response
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "unread_room_num": {
+                      "type": "integer"
+                    },
+                    "mention_room_num": {
+                      "type": "integer"
+                    },
+                    "mytask_room_num": {
+                      "type": "integer"
+                    },
+                    "unread_num": {
+                      "type": "integer"
+                    },
+                    "mention_num": {
+                      "type": "integer"
+                    },
+                    "mytask_num": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "unread_room_num",
+                    "mention_room_num",
+                    "mytask_room_num",
+                    "unread_num",
+                    "mention_num",
+                    "mytask_num"
+                  ]
+                }
+              example: |
+                {
+                  "unread_room_num": 2,
+                  "mention_room_num": 1,
+                  "mytask_room_num": 3,
+                  "unread_num": 12,
+                  "mention_num": 1,
+                  "mytask_num": 8
+                }
+  /tasks:
+    GET:
+      description: >
+        自分のタスク一覧を取得する。(※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
+      queryParameters:
+        assigned_by_account_id:
+          displayName: >
+            タスクの依頼者のアカウントID
+          type: integer
+          example: 78
+        status:
+          displayName: タスクのステータス
+          type: string
+          enum:
+            - open
+            - done
+          default: open
+          example: done
+      is:
+        - my_task_list_response
+        - unauthorized_response
+/contacts:
+  GET:
+    description: 自分のコンタクト一覧を取得
+    is:
+      - account_list_response
+      - unauthorized_response
+/rooms:
+  GET:
+    description: 自分のチャット一覧の取得
+    is:
+      - room_list_response
+      - unauthorized_response
+  POST:
+    description: グループチャットを新規作成
+    is:
+      - room_members
+      - room_icon
+      - room_response
+      - unauthorized_response
+    queryParameters:
+      name:
+        displayName: グループチャット名
+        type: string
+        maxLength: 255
+        minLength: 1
+        description: >
+          作成したいグループチャットのチャット名
+        example: Website renewal project
+        required: true
+      description:
+        displayName: チャット概要
+        type: string
+        description: >
+          グループチャットの概要説明テキスト
+        example: group chat description
+  /{room_id}:
+    uriParameters:
+      room_id:
+        displayName: ルームID
+        type: integer
+    GET:
+      description: >
+        チャットの名前、アイコン、種類(my/direct/group)を取得
+      is:
+        - room_response
+        - unauthorized_response
+    PUT:
+      description: >
+        チャットの名前、アイコンをアップデート
+      is:
+        - room_icon
+        - room_response
+        - unauthorized_response
+      queryParameters:
+        name:
+          displayName: グループチャット名
+          type: string
+          maxLength: 255
+          minLength: 1
+          description: >
+            グループチャットのチャット名
+          example: Website renewal project
+        description:
+          displayName: チャット概要
+          type: string
+          description: >
+            グループチャットの概要説明テキスト
+          example: group chat description
+    DELETE:
+      description: >
+        グループチャットを退席/削除する
+      is:
+        - nocontent_response
+        - unauthorized_response
+      queryParameters:
+        action_type:
+          displayName: 退席するか、削除するか
+          type: string
+          enum:
+            - leave
+            - delete
+          example: leave
+          required: true
+          description: |
+            退席すると、このグループチャットにある自分が担当のタスク、および自分が送信したファイルは削除されます。
+            削除すると、このグループチャットに参加しているメンバー全員のメッセージ、タスク、ファイルはすべて削除されます。
+            ※一度削除すると元に戻せません！
+    /members:
+      GET:
+        description: >
+          チャットのメンバー一覧を取得
+        is:
+          - room_member_list_response
+          - unauthorized_response
+      PUT:
+        description: >
+          チャットのメンバーを一括変更
+        is:
+          - room_members
+          - unauthorized_response
+        body:
+          application/json:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "object",
+                "properties": {
+                  "admin": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "integer",
+                      }
+                    ]
+                  },
+                  "member": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "integer",
+                      }
+                    ]
+                  },
+                  "readonly": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "integer",
+                      }
+                    ]
+                  }
+                }
+              }
+            example: |
+              {
+                "admin": [123, 542, 1001],
+                "member": [10, 103],
+                "readonly": [6, 11]
+              }
+    /messages:
+      GET:
+        description: '[notimplemented]チャットのメッセージ一覧を取得 (※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)'
+        is:
+          - message_list_response
+          - unauthorized_response
+      POST:
+        description: >
+          チャットに新しいメッセージを追加
+        queryParameters:
+          body:
+            displayName: メッセージ本文
+            type: string
+            required: true
+            maxLength: 65535
+            minLength: 1
+            example: Hello ChatWork!
+        is:
+          - message_response
+          - unauthorized_response
+      /{message_id}:
+        uriParameters:
+          message_id:
+            displayName: メッセージID
+            type: integer
+        GET:
+          description: メッセージ情報を取得
+          is:
+            - message_response
+            - unauthorized_response
+    /tasks:
+      GET:
+        description: >
+          チャットのタスク一覧を取得
+          (※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
+        queryParameters:
+          account_id:
+            displayName: >
+              タスクの担当者のアカウントID
+            type: integer
+            example: 101
+          assigned_by_account_id:
+            displayName: >
+              タスクの依頼者のアカウントID
+            type: integer
+            example: 78
+          status:
+            displayName: タスクのステータス
+            type: string
+            enum:
+              - open
+              - done
+            default: open
+            example: done
+        is:
+          - room_task_list_response
+          - unauthorized_response
+      POST:
+        description: >
+          チャットに新しいタスクを追加
+        queryParameters:
+          body:
+            displayName: タスクの内容
+            type: string
+            required: true
+            maxLength: 65535
+            example: Buy milk
+          to_ids:
+            displayName: 担当者のアカウントID
+            description: '[string-list:type=integer]担当者のアカウントIDをカンマ区切りで'
+            type: string
+            required: true
+            example: 1,3,6
+          limit:
+            displayName: タスクの期限
+            type: integer
+        is:
+          - unauthorized_response
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema#",
+                    "type": "object",
+                    "properties": {
+                      "task_ids": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                example: |
+                  {
+                    "task_ids": [123,124]
+                  }
+      /{task_id}:
+        uriParameters:
+          task_id:
+            displayName: タスクID
+            type: integer
+        GET:
+          description: タスク情報を取得
+          is:
+            - task_response
+            - unauthorized_response
+    /files:
+      GET:
+        description: >
+          チャットのファイル一覧を取得
+          (※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
+        queryParameters:
+          account_id:
+            displayName: >
+              アップロードしたユーザーのアカウントID
+            type: integer
+            example: 101
+        is:
+          - file_list_response
+          - unauthorized_response
+      /{file_id}:
+        uriParameters:
+          file_id:
+            displayName: ファイルID
+            type: integer
+        GET:
+          description: ファイル情報を取得
+          queryParameters:
+            create_download_url:
+              displayName: >
+                ダウンロードする為のURLを生成するか
+              description: >
+                30秒間だけダウンロード可能なURLを生成します
+              type: boolean
+              default: false
+          is:
+            - file_response
+            - unauthorized_response
