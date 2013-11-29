@@ -1179,7 +1179,6 @@ traits:
     is:
       - room_members
       - room_icon
-      - room_response
       - unauthorized_response
     queryParameters:
       name:
@@ -1197,6 +1196,27 @@ traits:
         description: >
           グループチャットの概要説明テキスト
         example: group chat description
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "object",
+                "properties": {
+                  "room_id": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "room_id"
+                ]
+              }
+            example: |
+              {
+                "room_id": 1234
+              }
   /{room_id}:
     uriParameters:
       room_id:
@@ -1213,7 +1233,6 @@ traits:
         チャットの名前、アイコンをアップデート
       is:
         - room_icon
-        - room_response
         - unauthorized_response
       queryParameters:
         name:
@@ -1230,6 +1249,27 @@ traits:
           description: >
             グループチャットの概要説明テキスト
           example: group chat description
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "room_id": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "room_id"
+                  ]
+                }
+              example: |
+                {
+                  "room_id": 1234
+                }
     DELETE:
       description: >
         グループチャットを退席/削除する
@@ -1262,45 +1302,52 @@ traits:
         is:
           - room_members
           - unauthorized_response
-        body:
-          application/json:
-            schema: |
-              {
-                "$schema": "http://json-schema.org/schema#",
-                "type": "object",
-                "properties": {
-                  "admin": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "integer",
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema#",
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      },
+                      "member": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      },
+                      "readonly": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "integer"
+                          }
+                        ]
                       }
-                    ]
-                  },
-                  "member": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "integer",
-                      }
-                    ]
-                  },
-                  "readonly": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "integer",
-                      }
+                    },
+                    "required": [
+                      "admin",
+                      "member",
+                      "readonly"
                     ]
                   }
-                }
-              }
-            example: |
-              {
-                "admin": [123, 542, 1001],
-                "member": [10, 103],
-                "readonly": [6, 11]
-              }
+                example: |
+                  {
+                    "admin": [123, 542, 1001],
+                    "member": [10, 103],
+                    "readonly": [6, 11]
+                  }
     /messages:
       GET:
         description: '[notimplemented]チャットのメッセージ一覧を取得 (※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)'
@@ -1319,8 +1366,28 @@ traits:
             minLength: 1
             example: Hello ChatWork!
         is:
-          - message_response
           - unauthorized_response
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |
+                  {
+                    "$schema": "http://json-schema.org/schema#",
+                    "type": "object",
+                    "properties": {
+                      "message_id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "message_id"
+                    ]
+                  }
+                example: |
+                  {
+                    "message_id": 1234
+                  }
       /{message_id}:
         uriParameters:
           message_id:
@@ -1395,7 +1462,10 @@ traits:
                             "type": "integer"
                           }
                         ]
-                      }
+                      },
+                      "required": [
+                        "task_ids"
+                      ]
                     }
                   }
                 example: |
