@@ -1345,8 +1345,16 @@ traits:
                   }
     /messages:
       GET:
-        description: '[notimplemented]チャットのメッセージ一覧を取得 (※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)'
-        is:
+        queryParameters:
+          force:
+            displayName: 未取得にかかわらず最新の100件を取得するか
+            type: boolean
+            description: 1を指定すると未取得にかかわらず最新の100件を取得します（デフォルトは0）
+            default: false
+            example: 0
+        description: |
+          チャットのメッセージ一覧を取得。パラメータ未指定だと前回取得分からの差分のみを返します。(最大100件まで取得)
+        is: 
           - message_list_response
           - unauthorized_response
       POST:
