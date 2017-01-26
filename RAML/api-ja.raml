@@ -2,7 +2,7 @@
 #http://raml.org/index.html
 title: ChatWork API
 baseUri: 'https://api.chatwork.com/{version}'
-version: v1
+version: v2
 traits:
   - 
     room_members:
@@ -327,7 +327,7 @@ traits:
                                       ]
                                     },
                                     "message_id":              {
-                                      "type":"integer"
+                                      "type":"string"
                                     },
                                     "body":                    {
                                       "type":"string"
@@ -363,7 +363,7 @@ traits:
                     "name": "Anna",
                     "avatar_image_url": "https://example.com/def.png"
                   },
-                  "message_id": 13,
+                  "message_id": "13",
                   "body": "buy milk",
                   "limit_time": 1384354799,
                   "status": "open"
@@ -425,7 +425,7 @@ traits:
                                           ]
                                         },
                                         "message_id":              {
-                                          "type":"integer"
+                                          "type":"string"
                                         },
                                         "body":                    {
                                           "type":"string"
@@ -464,7 +464,7 @@ traits:
                       "name": "Anna",
                       "avatar_image_url": "https://example.com/def.png"
                     },
-                    "message_id": 13,
+                    "message_id": "13",
                     "body": "buy milk",
                     "limit_time": 1384354799,
                     "status": "open"
@@ -527,7 +527,7 @@ traits:
                                           ]
                                         },
                                         "message_id":              {
-                                          "type":"integer"
+                                          "type":"string"
                                         },
                                         "body":                    {
                                           "type":"string"
@@ -566,7 +566,7 @@ traits:
                       "name": "Anna",
                       "avatar_image_url": "https://example.com/def.png"
                     },
-                    "message_id": 13,
+                    "message_id": "13",
                     "body": "buy milk",
                     "limit_time": 1384354799,
                     "status": "open"
@@ -847,7 +847,7 @@ traits:
                                       ]
                                     },
                                     "message_id": {
-                                      "type": "integer"
+                                      "type": "string"
                                     },
                                     "filename": {
                                       "type": "string"
@@ -879,7 +879,7 @@ traits:
                     "name":"Bob",
                     "avatar_image_url": "https://example.com/ico_avatar.png"
                   },
-                  "message_id": 22,
+                  "message_id": "22",
                   "filename": "README.md",
                   "filesize": 2232,
                   "upload_time": 1384414750
@@ -922,7 +922,7 @@ traits:
                                           ]
                                         },
                                         "message_id": {
-                                          "type": "integer"
+                                          "type": "string"
                                         },
                                         "filename": {
                                           "type": "string"
@@ -954,7 +954,7 @@ traits:
                       "name": "Bob",
                       "avatar_image_url": "https://example.com/ico_avatar.png"
                     },
-                    "message_id": 22,
+                    "message_id": "22",
                     "filename": "README.md",
                     "filesize": 2232,
                     "upload_time": 1384414750
@@ -973,7 +973,7 @@ traits:
                                   "type": "object",
                                   "properties": {
                                     "message_id": {
-                                      "type": "integer"
+                                      "type": "string"
                                     },
                                     "account": {
                                       "type": "object",
@@ -1014,7 +1014,7 @@ traits:
                                 }
               example: |
                 {
-                  "message_id": 5,
+                  "message_id": "5",
                   "account": {
                     "account_id": 123,
                     "name": "Bob",
@@ -1040,7 +1040,7 @@ traits:
                                       "type": "object",
                                       "properties": {
                                         "message_id": {
-                                          "type": "integer"
+                                          "type": "string"
                                         },
                                         "account": {
                                           "type": "object",
@@ -1084,7 +1084,7 @@ traits:
               example: |
                 [
                   {
-                    "message_id": 5,
+                    "message_id": "5",
                     "account": {
                       "account_id": 123,
                       "name": "Bob",
@@ -1093,6 +1093,135 @@ traits:
                     "body": "Hello Chatwork!",
                     "send_time": 1384242850,
                     "update_time": 0
+                  }
+                ]
+  - 
+    incoming_request_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                |
+                                {
+                                  "$schema": "http://json-schema.org/schema#",
+                                  "type": "object",
+                                  "properties": {
+                                    "account_id": {
+                                      "type": "integer"
+                                    },
+                                    "room_id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "chatwork_id": {
+                                      "type": "string"
+                                    },
+                                    "organization_id": {
+                                      "type": "integer"
+                                    },
+                                    "organization_name": {
+                                      "type": "string"
+                                    },
+                                    "department": {
+                                      "type": "string"
+                                    },
+                                    "avatar_image_url": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "account_id",
+                                    "room_id",
+                                    "name",
+                                    "chatwork_id",
+                                    "organization_id",
+                                    "organization_name",
+                                    "department",
+                                    "avatar_image_url"
+                                  ]
+                                }
+              example: |
+                {
+                  "account_id": 363,
+                  "room_id": 1234,
+                  "name": "John Smith",
+                  "chatwork_id": "tarochatworkid",
+                  "organization_id": 101,
+                  "organization_name": "Hello Company",
+                  "department": "Marketing",
+                  "avatar_image_url": "https://example.com/abc.png"
+                }
+  - 
+    incoming_request_list_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                |
+                                {
+                                  "$schema": "http://json-schema.org/schema#",
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "properties": {
+                                        "request_id": {
+                                          "type": "integer"
+                                        },
+                                        "account_id": {
+                                          "type": "integer"
+                                        },
+                                        "message": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "chatwork_id": {
+                                          "type": "string"
+                                        },
+                                        "organization_id": {
+                                          "type": "integer"
+                                        },
+                                        "organization_name": {
+                                          "type": "string"
+                                        },
+                                        "department": {
+                                          "type": "string"
+                                        },
+                                        "avatar_image_url": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "request_id",
+                                        "account_id",
+                                        "message",
+                                        "name",
+                                        "chatwork_id",
+                                        "organization_id",
+                                        "organization_name",
+                                        "department",
+                                        "avatar_image_url"
+                                      ]
+                                    }
+                                  ]
+                                }
+              example: |
+                [
+                  {
+                    "request_id": 123,
+                    "account_id": 363,
+                    "message": "hogehoge",
+                    "name": "John Smith",
+                    "chatwork_id": "tarochatworkid",
+                    "organization_id": 101,
+                    "organization_name": "Hello Company",
+                    "department": "Marketing",
+                    "avatar_image_url": "https://example.com/abc.png"
                   }
                 ]
 /me:
@@ -1406,7 +1535,7 @@ traits:
                                       "type": "object",
                                       "properties": {
                                         "message_id": {
-                                          "type": "integer"
+                                          "type": "string"
                                         }
                                       },
                                       "required": [
@@ -1415,7 +1544,7 @@ traits:
                                     }
                 example: |
                   {
-                    "message_id": 1234
+                    "message_id": "1234"
                   }
       /{message_id}:
         uriParameters:
@@ -1551,3 +1680,27 @@ traits:
           is:
             - file_response
             - unauthorized_response
+/incoming_requests:
+  GET:
+    description: >
+      自分に対するコンタクト承認依頼一覧を取得する(※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
+    is:
+      - incoming_request_list_response
+      - unauthorized_response
+  /{request_id}:
+    uriParameters:
+      request_id:
+        displayName: リクエストID
+        type: integer
+    PUT:
+      description: >
+        自分に対するコンタクト承認依頼を承認する
+      is:
+        - incoming_request_response
+        - unauthorized_response
+    DELETE:
+      description: >
+        自分に対するコンタクト承認依頼をキャンセルする
+      is:
+        - nocontent_response
+        - unauthorized_response
