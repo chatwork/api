@@ -1546,6 +1546,83 @@ traits:
                   {
                     "message_id": "1234"
                   }
+      /read:
+        PUT:
+          description: メッセージを既読にする
+          queryParameters:
+            message_id:
+              displayName: >
+                ここで指定するIDのメッセージまでを既読にする。すでに既読済みの場合はエラー(400)
+              type: string
+              example: "101"
+          is:
+            - unauthorized_response
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: |
+                    |
+                                        {
+                                          "$schema": "http://json-schema.org/schema#",
+                                          "type": "object",
+                                          "properties": {
+                                            "unread_num": {
+                                              "type": "integer"
+                                            },
+                                            "mention_num": {
+                                              "type": "integer"
+                                            }
+                                          },
+                                          "required": [
+                                            "unread_num",
+                                            "mention_num"
+                                          ]
+                                        }
+                  example: |
+                    {
+                      "unread_num": 461,
+                      "mention_num": 0
+                    }
+      /unread:
+        PUT:
+          description: メッセージを未読にする
+          queryParameters:
+            message_id:
+              displayName: >
+                ここで指定するIDのメッセージ以降を未読にする
+              type: string
+              required: true
+              example: "101"
+          is:
+            - unauthorized_response
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: |
+                    |
+                                        {
+                                          "$schema": "http://json-schema.org/schema#",
+                                          "type": "object",
+                                          "properties": {
+                                            "unread_num": {
+                                              "type": "integer"
+                                            },
+                                            "mention_num": {
+                                              "type": "integer"
+                                            }
+                                          },
+                                          "required": [
+                                            "unread_num",
+                                            "mention_num"
+                                          ]
+                                        }
+                  example: |
+                    {
+                      "unread_num":  3,
+                      "mention_num": 0
+                    }
       /{message_id}:
         uriParameters:
           message_id:
@@ -1556,6 +1633,68 @@ traits:
           is:
             - message_response
             - unauthorized_response
+        PUT:
+          description: >
+            チャットのメッセージを更新する。
+          queryParameters:
+            body:
+              displayName: 更新するメッセージ本文
+              type: string
+              required: true
+              maxLength: 65535
+              minLength: 1
+              example: Hello ChatWork!
+          is:
+            - unauthorized_response
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: |
+                    |
+                                        {
+                                          "$schema": "http://json-schema.org/schema#",
+                                          "type": "object",
+                                          "properties": {
+                                            "message_id": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "message_id"
+                                          ]
+                                        }
+                  example: |
+                    {
+                      "message_id": "1234"
+                    }
+        DELETE:
+          description: メッセージを削除
+          is:
+            - unauthorized_response
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: |
+                    |
+                                        {
+                                          "$schema": "http://json-schema.org/schema#",
+                                          "type": "object",
+                                          "properties": {
+                                            "message_id": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "message_id"
+                                          ]
+                                        }
+                  example: |
+                    |
+                                        {
+                                          "message_id": "1234"
+                                        }
     /tasks:
       GET:
         description: >
