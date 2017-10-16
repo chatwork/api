@@ -637,6 +637,9 @@ traits:
                                     },
                                     "avatar_image_url": {
                                       "type": "string"
+                                    },
+                                    "login_mail": {
+                                      "type": "string"
                                     }
                                   },
                                   "required": [
@@ -657,7 +660,8 @@ traits:
                                     "skype",
                                     "facebook",
                                     "twitter",
-                                    "avatar_image_url"
+                                    "avatar_image_url",
+                                    "login_mail"
                                   ]
                                 }
               example: |
@@ -670,7 +674,7 @@ traits:
                   "organization_name": "Hello Company",
                   "department": "Marketing",
                   "title": "CMO",
-                  "url": "http://mycompany.com",
+                  "url": "http://mycompany.example.com",
                   "introduction": "Self Introduction",
                   "mail": "taro@example.com",
                   "tel_organization": "XXX-XXXX-XXXX",
@@ -679,7 +683,8 @@ traits:
                   "skype": "myskype_id",
                   "facebook": "myfacebook_id",
                   "twitter": "mytwitter_id",
-                  "avatar_image_url": "https://example.com/abc.png"
+                  "avatar_image_url": "https://example.com/abc.png",
+                  "login_mail": "account@example.com"
                 }
   - 
     account_list_response:
