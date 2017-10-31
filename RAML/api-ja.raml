@@ -3,6 +3,26 @@
 title: ChatWork API
 baseUri: 'https://api.chatwork.com/{version}'
 version: v2
+securitySchemes:
+  - 
+    oauth_2_0:
+      description: |
+        |
+                チャットワークAPIはOAuth2.0 Bearer Token Usageをサポートしています。
+      type: OAuth 2.0
+      describedBy:
+        headers:
+          Authorization:
+            description: |
+              |
+                            Authorizationヘッダーにトークンをセットしてください 例. Authorization: Bearer eyJjdHkiGpg...
+            type: string
+      settings:
+        authorizationUri: >
+          https://www.chatwork.com/packages/oauth2/login.php
+        accessTokenUri: https://oauth.chatwork.com/token
+        authorizationGrants:
+          - code
 traits:
   - 
     room_members:
@@ -1235,6 +1255,12 @@ traits:
     is:
       - my_account_response
       - unauthorized_response
+    securedBy:
+      - 
+        oauth_2_0:
+          scopes:
+            - users.all:read
+            - users.profile.me:read
 /my:
   /status:
     GET:
@@ -1242,6 +1268,12 @@ traits:
         自分の未読数、未読To数、未完了タスク数を返す
       is:
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - users.all:read
+              - users.status.me:read
       responses:
         200:
           body:
@@ -1310,24 +1342,50 @@ traits:
       is:
         - my_task_list_response
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - users.all:read
+              - users.tasks.me:read
 /contacts:
   GET:
     description: 自分のコンタクト一覧を取得
     is:
       - account_list_response
       - unauthorized_response
+    securedBy:
+      - 
+        oauth_2_0:
+          scopes:
+            - contacts.all:read_write
+            - contacts.all:read
 /rooms:
   GET:
     description: 自分のチャット一覧の取得
     is:
       - room_list_response
       - unauthorized_response
+    securedBy:
+      - 
+        oauth_2_0:
+          scopes:
+            - rooms.all:read_write
+            - rooms.all:read
+            - rooms.info:read
   POST:
     description: グループチャットを新規作成
     is:
       - room_members
       - room_icon
       - unauthorized_response
+    securedBy:
+      - 
+        oauth_2_0:
+          scopes:
+            - rooms.all:read_write
+            - rooms.all:write
+            - rooms:write
     queryParameters:
       name:
         displayName: グループチャット名
@@ -1377,12 +1435,26 @@ traits:
       is:
         - room_response
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - rooms.all:read_write
+              - rooms.all:read
+              - rooms.info:read
     PUT:
       description: >
         チャットの名前、アイコンをアップデート
       is:
         - room_icon
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - rooms.all:read_write
+              - rooms.all:write
+              - rooms.info:write
       queryParameters:
         name:
           displayName: グループチャット名
@@ -1426,6 +1498,13 @@ traits:
       is:
         - nocontent_response
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - rooms.all:read_write
+              - rooms.all:write
+              - rooms:write
       queryParameters:
         action_type:
           displayName: 退席するか、削除するか
@@ -1446,12 +1525,26 @@ traits:
         is:
           - room_member_list_response
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:read
+                - rooms.members:read
       PUT:
         description: >
           チャットのメンバーを一括変更
         is:
           - room_members
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:write
+                - rooms.members:write
         responses:
           200:
             body:
@@ -1516,6 +1609,13 @@ traits:
         is:
           - message_list_response
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:read
+                - rooms.messages:read
       POST:
         description: >
           チャットに新しいメッセージを追加
@@ -1529,6 +1629,13 @@ traits:
             example: Hello ChatWork!
         is:
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:write
+                - rooms.messages:write
         responses:
           200:
             body:
@@ -1562,6 +1669,13 @@ traits:
               example: "101"
           is:
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:write
+                  - rooms.messages:write
           responses:
             200:
               body:
@@ -1601,6 +1715,13 @@ traits:
               example: "101"
           is:
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:write
+                  - rooms.messages:write
           responses:
             200:
               body:
@@ -1638,6 +1759,13 @@ traits:
           is:
             - message_response
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:read
+                  - rooms.messages:read
         PUT:
           description: >
             チャットのメッセージを更新する。
@@ -1651,6 +1779,13 @@ traits:
               example: Hello ChatWork!
           is:
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:write
+                  - rooms.messages:write
           responses:
             200:
               body:
@@ -1677,6 +1812,13 @@ traits:
           description: メッセージを削除
           is:
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:write
+                  - rooms.messages:write
           responses:
             200:
               body:
@@ -1727,6 +1869,13 @@ traits:
         is:
           - room_task_list_response
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:read
+                - rooms.tasks:read
       POST:
         description: >
           チャットに新しいタスクを追加
@@ -1754,6 +1903,13 @@ traits:
             type: integer
         is:
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:write
+                - rooms.tasks:write
         responses:
           200:
             body:
@@ -1791,6 +1947,13 @@ traits:
           is:
             - task_response
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:read
+                  - rooms.tasks:read
     /files:
       GET:
         description: >
@@ -1805,6 +1968,13 @@ traits:
         is:
           - file_list_response
           - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:read
+                - rooms.files:read
       /{file_id}:
         uriParameters:
           file_id:
@@ -1824,6 +1994,13 @@ traits:
           is:
             - file_response
             - unauthorized_response
+          securedBy:
+            - 
+              oauth_2_0:
+                scopes:
+                  - rooms.all:read_write
+                  - rooms.all:read
+                  - rooms.files:read
 /incoming_requests:
   GET:
     description: >
@@ -1831,6 +2008,12 @@ traits:
     is:
       - incoming_request_list_response
       - unauthorized_response
+    securedBy:
+      - 
+        oauth_2_0:
+          scopes:
+            - contacts.all:read_write
+            - contacts.all:read
   /{request_id}:
     uriParameters:
       request_id:
@@ -1842,9 +2025,21 @@ traits:
       is:
         - incoming_request_response
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - contacts.all:read_write
+              - contacts.all:write
     DELETE:
       description: >
         自分に対するコンタクト承認依頼をキャンセルする
       is:
         - nocontent_response
         - unauthorized_response
+      securedBy:
+        - 
+          oauth_2_0:
+            scopes:
+              - contacts.all:read_write
+              - contacts.all:write
