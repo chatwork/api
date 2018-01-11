@@ -34,21 +34,21 @@ traits:
           description: |
             |
                         [string-list:type=integer]作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。
-          example: 123,542,1001
+          example: "123,542,1001"
         members_member_ids:
           displayName: メンバー権限のユーザー
           type: string
           description: |
             |
                         [string-list:type=integer]作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。
-          example: 21,344
+          example: "21,344"
         members_readonly_ids:
           displayName: 閲覧のみ権限のユーザー
           type: string
           description: |
             |
                         [string-list:type=integer]作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。
-          example: 15,103
+          example: "15,103"
   - 
     room_icon:
       queryParameters:
@@ -1893,7 +1893,7 @@ traits:
                             [string-list:type=integer]担当者のアカウントIDをカンマ区切りで
             type: string
             required: true
-            example: 1,3,6
+            example: "1,3,6"
           limit:
             displayName: タスクの期限
             description: |
