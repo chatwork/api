@@ -1088,6 +1088,43 @@ traits:
                   }
                 ]
   #==================================================
+  #  Invitation Link Response
+  #==================================================
+  - invitation_link_response:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                  "$schema": "http://json-schema.org/schema#",
+                  "type": "object",
+                  "properties": {
+                    "public": {
+                      "type": "boolean"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "need_acceptance": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "public"
+                  ]
+                }
+              example: |
+                {
+                  "public": true,
+                  "url": "https://example.chatwork.com/g/randomcode42",
+                  "need_acceptance": true,
+                  "description": "Link description text"
+                }
+  #==================================================
   #  Incoming Request Response
   #==================================================
   - incoming_request_response:
@@ -1342,6 +1379,26 @@ traits:
         type: string
         description: グループチャットの概要説明テキスト
         example: "group chat description"
+      link:
+        displayName: 招待リンク作成
+        description: 招待リンクを作成するか
+        type: boolean
+        required: false
+        default: false
+      link_code:
+        displayName: リンク文字列
+        description: リンクのパス部分。省略するとランダムな文字列となる。
+        type: string
+        required: false
+        minLength: 1
+        maxLength: 50
+        pattern: ^[A-Za-z0-9_-]+$
+      link_need_acceptance:
+        displayName: 承認要否
+        description: 参加に管理者の承認を必要とするか。
+        type: boolean
+        required: false
+        default: true
     responses:
       200:
         body:
@@ -1857,6 +1914,119 @@ traits:
                   - "rooms.all:read_write"
                   - "rooms.all:read"
                   - "rooms.files:read"
+    /link:
+      GET:
+        description: 招待リンクを取得する
+        is: [ unauthorized_response, invitation_link_response ]
+        securedBy:
+          - oauth_2_0:
+              scopes:
+                - "rooms.all:read_write"
+                - "rooms.all:read"
+                - "rooms.info:read"
+      POST:
+        description: 招待リンクを作成する
+        is: [ unauthorized_response, invitation_link_response ]
+        queryParameters:
+          code:
+            displayName: リンク文字列
+            description: リンクのパス部分。省略するとランダムな文字列となる。
+            type: string
+            required: false
+            minLength: 1
+            maxLength: 50
+            pattern: ^[A-Za-z0-9_-]+$
+            example: unique-link-name
+          need_acceptance:
+            displayName: 承認要否
+            description: 参加に管理者の承認を必要とするか。
+            type: boolean
+            required: false
+            default: true
+          description:
+            displayName: リンク説明文
+            description: リンクページに表示される説明文。
+            type: string
+            required: false
+            example: "This is a public room for topic A."
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "public": true,
+                    "url": "https://example.chatwork.com/g/unique-link-name",
+                    "need_acceptance": true,
+                    "description": "This is a public room for topic A."
+                  }
+        securedBy:
+          - oauth_2_0:
+              scopes:
+                - "rooms.all:read_write"
+                - "rooms.all:write"
+                - "rooms.info:write"
+      PUT:
+        description: 招待リンクの情報を変更する
+        is: [ unauthorized_response, invitation_link_response ]
+        queryParameters:
+          code:
+            displayName: リンク文字列
+            description: リンクのパス部分。省略するとランダムな文字列となる。
+            type: string
+            required: false
+            minLength: 1
+            maxLength: 50
+            pattern: ^[A-Za-z0-9_-]+$
+            example: another_link_name
+          need_acceptance:
+            displayName: 承認要否
+            description: 参加に管理者の承認を必要とするか。
+            type: boolean
+            required: false
+            default: true
+            example: "0"
+          description:
+            displayName: リンク説明文
+            description: リンクページに表示される説明文。
+            type: string
+            required: false
+            example: "Public room for everybody"
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "public": true,
+                    "url": "https://example.chatwork.com/g/another_link_name",
+                    "need_acceptance": false,
+                    "description": "Public room for everybody"
+                  }
+        securedBy:
+          - oauth_2_0:
+              scopes:
+                - "rooms.all:read_write"
+                - "rooms.all:write"
+                - "rooms.info:write"
+      DELETE:
+        description: 招待リンクを削除する
+        is: [ unauthorized_response, invitation_link_response ]
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "public": false
+                  }
+        securedBy:
+          - oauth_2_0:
+              scopes:
+                - "rooms.all:read_write"
+                - "rooms.all:write"
+                - "rooms.info:write"
+
 /incoming_requests:
   GET:
     description: 自分に対するコンタクト承認依頼一覧を取得する(※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
