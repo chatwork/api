@@ -1,5 +1,5 @@
-チャットワークAPI 公式リポジトリ
+ChatWork API document
 ===
-公式ドキュメント: http://developer.chatwork.com/ja/
-
-今後、このリポジトリに公式のSDKを追加していく予定です。
+en: http://download.chatwork.com/ChatWork_API_Documentation.pdf
+ja: http://developer.chatwork.com/ja/
+zh-tw(Obsoleted. It has not been updated): http://blog-zh-tw.chatwork.com/2015/10/chatwork-api.html
