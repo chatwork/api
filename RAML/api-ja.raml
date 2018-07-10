@@ -2041,6 +2041,50 @@ traits:
                 - rooms.all:read_write
                 - rooms.all:read
                 - rooms.files:read
+      POST:
+        description: >
+          チャットに新しいファイルをアップロード
+        multipart/form-data:
+          formParameters:
+            file:
+              displayName: >
+                アップロードするファイル（上限：5MB）
+              type: file
+              required: true
+            message:
+              displayName: >
+                ファイルと一緒に投稿するメッセージの本文
+              type: string
+              example: I attached comment to chat.
+          example: |
+            --------------------------f295b94a5560e2eb
+            Content-Disposition: form-data; name="file"; filename="example.jpeg"
+            Content-Type: image/jpeg
+            
+            abc012....binarydata....789de
+            ...
+            --------------------------f295b94a5560e2eb
+            Content-Disposition: form-data; name="message"
+            
+            I attached comment to chat.
+            --------------------------f295b94a5560e2eb--
+        is:
+          - unauthorized_response
+        securedBy:
+          - 
+            oauth_2_0:
+              scopes:
+                - rooms.all:read_write
+                - rooms.all:write
+                - rooms.files:write
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "file_id": 1234
+                  }
       /{file_id}:
         uriParameters:
           file_id:
