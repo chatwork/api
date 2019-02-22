@@ -1,6 +1,6 @@
 #%RAML 0.8
 #http://raml.org/index.html
-title: ChatWork API
+title: Chatwork API
 baseUri: 'https://api.chatwork.com/{version}'
 version: v2
 securitySchemes:
@@ -8,7 +8,7 @@ securitySchemes:
     oauth_2_0:
       description: |
         |
-                チャットワークAPIはOAuth2.0 Bearer Token Usageをサポートしています。
+                Chatwork APIはOAuth2.0 Bearer Token Usageをサポートしています。
       type: OAuth 2.0
       describedBy:
         headers:
@@ -1684,7 +1684,7 @@ traits:
             required: true
             maxLength: 65535
             minLength: 1
-            example: Hello ChatWork!
+            example: Hello Chatwork!
           self_unread:
             displayName: >
               追加したメッセージを自分から見て未読とするか
@@ -1842,7 +1842,7 @@ traits:
               required: true
               maxLength: 65535
               minLength: 1
-              example: Hello ChatWork!
+              example: Hello Chatwork!
           is:
             - unauthorized_response
           securedBy:
