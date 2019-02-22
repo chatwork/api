@@ -2020,6 +2020,52 @@ traits:
                   - rooms.all:read_write
                   - rooms.all:read
                   - rooms.tasks:read
+        /status:
+          PUT:
+            description: タスク完了状態を変更する
+            queryParameters:
+              body:
+                displayName: タスク完了状態
+                type: string
+                enum:
+                  - open
+                  - done
+                required: true
+                example: done
+                description: |
+                  'done'を指定した場合、未完了のタスクを完了にします。
+                  'open'を指定した場合、完了のタスクを未完了にします。
+            is:
+              - unauthorized_response
+            securedBy:
+              - 
+                oauth_2_0:
+                  scopes:
+                    - rooms.all:read_write
+                    - rooms.all:write
+                    - rooms.tasks:write
+            responses:
+              200:
+                body:
+                  application/json:
+                    schema: |
+                      |
+                                            {
+                                              "$schema": "http://json-schema.org/schema#",
+                                              "type": "object",
+                                              "properties": {
+                                                "task_id": {
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [
+                                                "task_id"
+                                              ]
+                                            }
+                    example: |
+                      {
+                        "task_id": 1234
+                      }
     /files:
       GET:
         description: >
