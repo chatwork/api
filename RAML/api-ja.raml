@@ -1,6 +1,6 @@
 #%RAML 0.8
 #http://raml.org/index.html
-title: ChatWork API
+title: Chatwork API
 baseUri: 'https://api.chatwork.com/{version}'
 version: v2
 securitySchemes:
@@ -8,7 +8,7 @@ securitySchemes:
     oauth_2_0:
       description: |
         |
-                チャットワークAPIはOAuth2.0 Bearer Token Usageをサポートしています。
+                Chatwork APIはOAuth2.0 Bearer Token Usageをサポートしています。
       type: OAuth 2.0
       describedBy:
         headers:
@@ -33,21 +33,21 @@ traits:
           required: true
           description: |
             |
-                        [string-list:type=integer]作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。
+                        [string-list:type=integer]作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
           example: "123,542,1001"
         members_member_ids:
           displayName: メンバー権限のユーザー
           type: string
           description: |
             |
-                        [string-list:type=integer]作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。
+                        [string-list:type=integer]作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
           example: "21,344"
         members_readonly_ids:
           displayName: 閲覧のみ権限のユーザー
           type: string
           description: |
             |
-                        [string-list:type=integer]作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。
+                        [string-list:type=integer]作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
           example: "15,103"
   - 
     room_icon:
@@ -1684,7 +1684,7 @@ traits:
             required: true
             maxLength: 65535
             minLength: 1
-            example: Hello ChatWork!
+            example: Hello Chatwork!
           self_unread:
             displayName: >
               追加したメッセージを自分から見て未読とするか
@@ -1842,7 +1842,7 @@ traits:
               required: true
               maxLength: 65535
               minLength: 1
-              example: Hello ChatWork!
+              example: Hello Chatwork!
           is:
             - unauthorized_response
           securedBy:
@@ -2020,6 +2020,52 @@ traits:
                   - rooms.all:read_write
                   - rooms.all:read
                   - rooms.tasks:read
+        /status:
+          PUT:
+            description: タスク完了状態を変更する
+            queryParameters:
+              body:
+                displayName: タスク完了状態
+                type: string
+                enum:
+                  - open
+                  - done
+                required: true
+                example: done
+                description: |
+                  'done'を指定した場合、未完了のタスクを完了にします。
+                  'open'を指定した場合、完了のタスクを未完了にします。
+            is:
+              - unauthorized_response
+            securedBy:
+              - 
+                oauth_2_0:
+                  scopes:
+                    - rooms.all:read_write
+                    - rooms.all:write
+                    - rooms.tasks:write
+            responses:
+              200:
+                body:
+                  application/json:
+                    schema: |
+                      |
+                                            {
+                                              "$schema": "http://json-schema.org/schema#",
+                                              "type": "object",
+                                              "properties": {
+                                                "task_id": {
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [
+                                                "task_id"
+                                              ]
+                                            }
+                    example: |
+                      {
+                        "task_id": 1234
+                      }
     /files:
       GET:
         description: >
