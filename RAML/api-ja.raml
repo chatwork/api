@@ -358,6 +358,10 @@ traits:
                                     "status":                  {
                                       "type":"string",
                                       "enum": ["open", "done"]
+                                    },
+                                    "limit_type":              {
+                                      "type":"string",
+                                      "enum": ["none", "date", "time"]
                                     }
                                   },
                                   "required": [
@@ -367,7 +371,8 @@ traits:
                                     "message_id",
                                     "body",
                                     "limit_time",
-                                    "status"
+                                    "status",
+                                    "limit_type"
                                   ]
                                 }
               example: |
@@ -386,7 +391,8 @@ traits:
                   "message_id": "13",
                   "body": "buy milk",
                   "limit_time": 1384354799,
-                  "status": "open"
+                  "status": "open",
+                  "limit_type": "date"
                 }
   - 
     my_task_list_response:
@@ -456,6 +462,10 @@ traits:
                                         "status":                  {
                                           "type":"string",
                                           "enum": ["open", "done"]
+                                        },
+                                        "limit_type":              {
+                                          "type":"string",
+                                          "enum": ["none", "date", "time"]
                                         }
                                       },
                                       "required": [
@@ -465,7 +475,8 @@ traits:
                                         "message_id",
                                         "body",
                                         "limit_time",
-                                        "status"
+                                        "status",
+                                        "limit_type"
                                       ]
                                     }
                                   ]
@@ -487,7 +498,8 @@ traits:
                     "message_id": "13",
                     "body": "buy milk",
                     "limit_time": 1384354799,
-                    "status": "open"
+                    "status": "open",
+                    "limit_type": "date"
                   }
                 ]
   - 
@@ -558,6 +570,10 @@ traits:
                                         "status":                  {
                                           "type":"string",
                                           "enum": ["open", "done"]
+                                        },
+                                        "limit_type":                  {
+                                          "type":"string",
+                                          "enum": ["none", "date", "time"]
                                         }
                                       },
                                       "required": [
@@ -567,7 +583,8 @@ traits:
                                         "message_id",
                                         "body",
                                         "limit_time",
-                                        "status"
+                                        "status",
+                                        "limit_type"
                                       ]
                                     }
                                   ]
@@ -589,7 +606,8 @@ traits:
                     "message_id": "13",
                     "body": "buy milk",
                     "limit_time": 1384354799,
-                    "status": "open"
+                    "status": "open",
+                    "limit_type": "date"
                   }
                 ]
   - 
@@ -1967,6 +1985,19 @@ traits:
                             Unix timeで入力してください
             example: 1385996399
             type: integer
+          limit_type:
+            displayName: タスク期限の種別
+            description: |
+              |
+                            'none'を指定した場合、期限なしのタスクを作成します。
+                            'date'を指定した場合、日付期限のタスクを作成します。
+                            'time'を指定した場合、時間期限のタスクを作成します。
+            type: string
+            enum:
+              - none
+              - date
+              - time
+            example: time
         is:
           - unauthorized_response
         securedBy:
