@@ -1,1 +1,1 @@
-See [ChatWork API documents](http://developer.chatwork.com/vi/)
+See [Chatwork API documents](http://developer.chatwork.com/vi/)
