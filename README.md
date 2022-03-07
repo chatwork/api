@@ -1,3 +1,8 @@
+※ 本リポジトリはChatwork API ドキュメントのリニューアルに伴い、サポート終了となりました。
+
+今後は各種エンドポイントの仕様は以下から確認することができます。\
+https://developer.chatwork.com/reference/
+
 Chatwork API document
 ===
 - en: http://download.chatwork.com/ChatWork_API_Documentation.pdf
